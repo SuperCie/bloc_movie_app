@@ -1,9 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:practice_bloc2/bloc/export.dart';
 import 'package:practice_bloc2/models/moviemodels.dart';
 import 'package:practice_bloc2/pages/components/mybutton.dart';
-import 'package:practice_bloc2/pages/movie/seatpage.dart';
+import 'package:practice_bloc2/pages/seat/seatpage.dart';
 
 class Detailpage extends StatefulWidget {
   final Movie movie;
@@ -14,6 +15,33 @@ class Detailpage extends StatefulWidget {
 }
 
 class _DetailpageState extends State<Detailpage> {
+  bool isBookmarked = false;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final state = context.read<FavoriteBloc>().state;
+    if (state is FavoriteUpdate) {
+      isBookmarked = state.favorite.any(
+        (bookmark) => bookmark.movie == widget.movie,
+      );
+    }
+  }
+
+  void favoriteToggle() {
+    context.read<FavoriteBloc>().add(ToggleBookmark(movie: widget.movie));
+    setState(() {
+      isBookmarked = !isBookmarked;
+    });
+  }
+
+  void bookAction(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => Seatpage(movie: widget.movie)),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final String defaultDescription =
@@ -110,8 +138,10 @@ class _DetailpageState extends State<Detailpage> {
           SizedBox(
             width: 100,
             child: Mybutton(
-              ontap: () {},
-              widget: Icon(CupertinoIcons.bookmark),
+              ontap: () => favoriteToggle(),
+              widget: Icon(
+                isBookmarked ? Icons.favorite : Icons.favorite_border_outlined,
+              ),
             ),
           ),
           Expanded(
@@ -133,8 +163,4 @@ class _DetailpageState extends State<Detailpage> {
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
-}
-
-void bookAction(BuildContext context) {
-  Navigator.push(context, MaterialPageRoute(builder: (context) => Seatpage()));
 }

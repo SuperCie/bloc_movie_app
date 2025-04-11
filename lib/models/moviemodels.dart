@@ -2,6 +2,7 @@
 //
 //     final movie = movieFromJson(jsonString);
 
+import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 import 'dart:convert';
 
@@ -11,7 +12,7 @@ List<Movie> movieFromJson(String str) =>
 String movieToJson(List<Movie> data) =>
     json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
-class Movie {
+class Movie  extends Equatable{
   final String title;
   final String year;
   final String runtime;
@@ -39,5 +40,5 @@ class Movie {
   };
 
   @override
-  List<Object> get props => [title, year];
+  List<Object?> get props => [title, year, runtime, poster];
 }

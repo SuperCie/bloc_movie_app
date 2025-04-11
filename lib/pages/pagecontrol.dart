@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:practice_bloc2/pages/home/bookmarkpage.dart';
+import 'package:practice_bloc2/pages/home/favoritepage.dart';
 import 'package:practice_bloc2/pages/home/homepage.dart';
 import 'package:practice_bloc2/pages/home/ticketpage.dart';
 import 'package:crystal_navigation_bar/crystal_navigation_bar.dart';
@@ -16,7 +16,7 @@ class _PagecontrolState extends State<Pagecontrol> {
   // page index
   int currentPageIndex = 0;
 
-  final List page = [Homepage(), Bookmarkpage(), Ticketpage()];
+  final List page = [Homepage(), Favoritepage(), Ticketpage()];
 
   void tapBar(int index) {
     setState(() {
@@ -41,7 +41,7 @@ class _PagecontrolState extends State<Pagecontrol> {
             unselectedColor: Colors.white,
           ),
           CrystalNavigationBarItem(
-            icon: CupertinoIcons.bookmark_fill,
+            icon: Icons.favorite,
             selectedColor: Colors.teal.shade800,
           ),
 
