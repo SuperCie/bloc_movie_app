@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:practice_bloc2/bloc/export.dart';
 import 'package:practice_bloc2/models/moviemodels.dart';
+import 'package:practice_bloc2/models/ticketmodels.dart';
 import 'package:practice_bloc2/pages/components/cinemascreen.dart';
-import 'package:practice_bloc2/pages/components/mybutton.dart';
+import 'package:practice_bloc2/pages/components/msgscaffold.dart';
 import 'package:practice_bloc2/pages/seat/seatmanager.dart';
 import 'package:practice_bloc2/pages/seat/seatwidget.dart';
+import 'package:uuid/uuid.dart';
 
 class Seatpage extends StatefulWidget {
   final Movie movie;
@@ -26,6 +29,8 @@ class _SeatpageState extends State<Seatpage> {
 
   @override
   Widget build(BuildContext context) {
+    final ticketCreate = context.read<TicketBloc>();
+
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -172,7 +177,7 @@ class _SeatpageState extends State<Seatpage> {
                       ),
                     ),
                     Text(
-                      '\$${_seatManager.calculateTotal(_pricePerSeat)}',
+                      '\$${_seatManager.calculateTotal(_pricePerSeat).toStringAsFixed(0)}',
                       style: GoogleFonts.montserrat(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
@@ -183,21 +188,51 @@ class _SeatpageState extends State<Seatpage> {
                 ),
               ],
             ),
-            GestureDetector(
-              onTap: () {},
-              child: Container(
-                padding: EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  color: Colors.teal.shade700,
-                  borderRadius: BorderRadius.circular(25),
-                ),
-                width: double.infinity,
-                child: Center(
-                  child: Text(
-                    'Pay',
-                    style: GoogleFonts.montserrat(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
+            BlocListener<TicketBloc, TicketState>(
+              listener: (context, state) {
+                if (state is TicketSuccess) {
+                  msgScaffold(context, 'Ticket Purchased Successfully!');
+                }
+                if (state is TicketError) {
+                  msgScaffold(context, state.message);
+                }
+              },
+              child: GestureDetector(
+                onTap: () {
+                  if (_seatManager.selectedSeats.isEmpty) {
+                    Text('Seats must be selected');
+                  }
+                  final barcodeData =
+                      '${widget.movie.title}|${_seatManager.selectedSeats.join(',')}|${DateTime.now().millisecondsSinceEpoch}';
+
+                  final ticket = Ticketmodels(
+                    id: Uuid().v4(),
+                    movie: widget.movie,
+                    seats: _seatManager.selectedSeats.toList(),
+                    totalPrice: _seatManager.calculateTotal(_pricePerSeat),
+                    barcodeData: barcodeData,
+                  );
+
+                  ticketCreate.add(Addticket(ticket));
+
+                  Navigator.of(context).pop();
+
+                  Navigator.of(context).pop();
+                },
+                child: Container(
+                  padding: EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: Colors.teal.shade700,
+                    borderRadius: BorderRadius.circular(25),
+                  ),
+                  width: double.infinity,
+                  child: Center(
+                    child: Text(
+                      'Pay',
+                      style: GoogleFonts.montserrat(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
                 ),

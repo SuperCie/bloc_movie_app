@@ -10,6 +10,7 @@ void main() {
       providers: [
         BlocProvider(create: (context) => MovieBloc(), lazy: false),
         BlocProvider(create: (context) => FavoriteBloc()),
+        BlocProvider(create: (context) => TicketBloc()),
       ],
       child: App(),
     ),

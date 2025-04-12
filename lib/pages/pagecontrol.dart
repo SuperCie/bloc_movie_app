@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:practice_bloc2/pages/home/favoritepage.dart';
 import 'package:practice_bloc2/pages/home/homepage.dart';
-import 'package:practice_bloc2/pages/home/ticketpage.dart';
+import 'package:practice_bloc2/pages/ticket/ticketpage.dart';
 import 'package:crystal_navigation_bar/crystal_navigation_bar.dart';
 
 class Pagecontrol extends StatefulWidget {

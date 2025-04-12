@@ -4,7 +4,7 @@ import 'package:practice_bloc2/bloc/export.dart';
 import 'package:practice_bloc2/pages/components/mytile.dart';
 import 'package:practice_bloc2/pages/components/myupper.dart';
 import 'package:practice_bloc2/pages/components/myytplayer.dart';
-import 'package:practice_bloc2/pages/movie/detailpage.dart';
+import 'package:practice_bloc2/pages/home/detailpage.dart';
 
 class Homepage extends StatefulWidget {
   const Homepage({super.key});
