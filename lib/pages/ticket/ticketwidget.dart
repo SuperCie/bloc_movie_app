@@ -38,7 +38,7 @@ class Ticketwidget extends StatelessWidget {
                         child: SizedBox(
                           child: Image.network(
                             ticketmodels.movie.poster!,
-                            fit: BoxFit.contain,
+                            fit: BoxFit.cover,
                           ),
                         ),
                       ),
